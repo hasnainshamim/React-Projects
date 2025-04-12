@@ -6,6 +6,7 @@ import Nopage from '../screens/Nopage.jsx';
 import Passwordgen from '../../apps/PasswordGen/Passwordgen.jsx';
 import Counter from '../customHooks/Counter.jsx';
 import Todo from '../../apps/Todo/todo.jsx';
+import Ecommerce from '../../apps/Ecommerce/Ecommerce.jsx';
 
 const MainRoutes = () => {
     return (
@@ -16,6 +17,7 @@ const MainRoutes = () => {
                 <Route path="/counter" element={<Counter />} />
                 <Route path="/todo" element={<Todo />} />
                 <Route path="/password" element={<Passwordgen />} />
+                <Route path="/ecommerce" element={<Ecommerce />} />
                 <Route path="*" element={<Nopage />} />
             </Routes>
         </BrowserRouter>
