@@ -7,13 +7,24 @@ const Todo = () => {
 
     // Load todos from localStorage on mount
     useEffect(() => {
-        const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
-        settodos(savedTodos);
+        try {
+            const savedTodos = localStorage.getItem('todos');
+            if (savedTodos) {
+                settodos(JSON.parse(savedTodos));
+            }
+        } catch (error) {
+            console.error("Error loading todos:", error);
+            localStorage.removeItem('todos'); // Clear corrupted data
+        }
     }, []);
 
     // Save todos to localStorage whenever they change
     useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos));
+        try {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        } catch (error) {
+            console.error("Error saving todos:", error);
+        }
     }, [todos]);
 
     function addTodo() {
@@ -52,14 +63,14 @@ const Todo = () => {
                 <input
                     ref={inputRef}
                     type="text"
-                    className="input border px-4 py-2 w-full"
+                    className="border px-4 py-2 w-full rounded"
                     placeholder="Enter your task"
                     onChange={(e) => settodoAddingValue(e.target.value)}
                     value={todoAddingValue}
                     onKeyDown={(e) => e.key === 'Enter' && addTodo()}
                 />
                 <button
-                    className="btn btn-secondary px-4 py-2 bg-blue-500 text-white rounded"
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     onClick={addTodo}
                 >
                     Add Task
@@ -69,39 +80,34 @@ const Todo = () => {
             <hr className="mb-4" />
 
             <div>
-                <ul className="list-none space-y-3">
-                    {todos.length === 0 ? (
-                        <h2 className="text-center text-gray-500">Todo Not Found!</h2>
-                    ) : (
-                        todos.map((todo, index) => (
+                {todos.length === 0 ? (
+                    <h2 className="text-center text-gray-500">No tasks found!</h2>
+                ) : (
+                    <ul className="space-y-3">
+                        {todos.map((todo, index) => (
                             <li
-                                key={index}
+                                key={`${index}-${todo}`}
                                 className="flex justify-between items-center bg-yellow-100 px-4 py-2 rounded"
                             >
-                                <input
-                                    type="text"
-                                    className="bg-transparent font-medium w-full mr-4"
-                                    value={todo}
-                                    disabled
-                                />
+                                <span className="font-medium flex-1">{todo}</span>
                                 <div className="flex gap-2">
                                     <button
-                                        className="btn btn-warning bg-yellow-400 px-2 py-1 rounded"
+                                        className="px-3 py-1 bg-yellow-400 rounded hover:bg-yellow-500"
                                         onClick={() => editTodo(index)}
                                     >
                                         Edit
                                     </button>
                                     <button
-                                        className="btn btn-error bg-red-500 text-white px-2 py-1 rounded"
+                                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                                         onClick={() => deleteTodo(index)}
                                     >
                                         Delete
                                     </button>
                                 </div>
                             </li>
-                        ))
-                    )}
-                </ul>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );
