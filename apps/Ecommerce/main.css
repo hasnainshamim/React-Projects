@@ -6,3 +6,9 @@
     background-attachment: fixed;
 
 }
+
+@media (max-width: 768px) {
+    .bg-my {
+      background-position: 60% center;
+    }
+  }
