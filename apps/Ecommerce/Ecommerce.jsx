@@ -18,7 +18,6 @@ const Ecommerce = () => {
             <Banner />
             <Tab />
             <Driver />
-            <Loading />
             <Footer/>
 
         </div>
